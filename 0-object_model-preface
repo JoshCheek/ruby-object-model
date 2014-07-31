@@ -39,6 +39,19 @@ Gameplan:
     once you find the method, create a binding with self set to the instance
     and run the code for the method in that binding
 
+Definition of The Ruby Object Model:
+  All magic sits on top of not-magic
+    Everything that happens in Ruby happens for a reason.
+    It isn't arbitrary.
+    It isn't magic.
+    It all fits into a set of rules defined by the Object Model.
+  Defining the Object Model
+    The Object Model is the way we think about data and instructions in Ruby.
+    Everything you do in Ruby comes back to this.
+    Every piece of code you see *does* fit into this.
+    No matter how much it looks like it's doing something else.
+    Understanding the object model gives you the foundation to understand all other code.
+
 Reminders to self:
   remember to draw the Object Model as we go
   make sure they know its okay that they don't understand every piece of *code* (esp C code)
