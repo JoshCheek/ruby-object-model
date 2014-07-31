@@ -1,0 +1,122 @@
+Lesson 1: Classes and instances
+  CORE IDEAS:
+    Classes
+      store instance methods
+      have a superclass pointer (this is called inheritance)
+    Instances
+      store instance variables
+      have a class pointer
+    Classes are also instances (of Class)
+  Objective:
+    Understand the roles of Classes and Instances well enough to reason about code, and have a foundation to understand all the other stuff in Ruby.
+  Material
+  # 1: Classes and instances
+  # NOTE TO SELF: Draw these as you go :D
+
+  RUBY_VERSION # => "2.1.1"
+
+  # ===== Classes and Instances =====
+  # Objective: Begin building the framework that *everything else* rests on
+
+  # Here is a class and an instance. Why the distinction? What is the relevance?
+  class Instructor
+  end
+  josh = Instructor.new
+
+
+  # ===== Classes =====
+
+  # Classes store methods, groups of code
+  # (a series of instructions telling the computer what to do)
+  # which can be run in the context of their instances
+  class Instructor
+    def name
+      "Josh Cheek"
+    end
+  end
+  Instructor.instance_methods(false)
+  josh.name
+
+
+  # Classes have a reference to their superclass (we say it "inherits" from the superclass)
+  # If we haven't specified the superclass, then it defaults to Object
+  # We'll explain why we care about this in section 3
+  Instructor.superclass
+
+  class RemoteInstructor < Instructor
+    def age
+      53
+    end
+  end
+
+  RemoteInstructor.superclass
+                  .superclass
+                  .superclass
+                  .superclass
+
+
+  # ===== Instances (aka Objects) =====
+  # When a class makes a new instance, it invokes initialize on that instance
+  # and passes it any arguments it received
+  class Instructor
+    def initialize(name)
+      name
+    end
+  end
+  Instructor.new("Josh")
+
+
+  # Instances store instance variables
+  class Instructor
+    def initialize(name)
+      @name = name
+    end
+  end
+  josh = Instructor.new "Josh"
+  josh.instance_variables
+  josh.instance_variable_get(:@name)
+
+  rachel = Instructor.new "Rachel"
+  rachel.instance_variables
+  rachel.instance_variable_get :@name
+
+  # Instances have a reference to their class
+  josh.class
+  rachel.class
+
+
+  # ===== Omg, it's Question Time! =====
+  # NOTE: Your life here will be happier if you
+  # get over your fear of being wrong in front of the class.
+
+  # QUESTION: Why do instances have a reference to their class?
+
+  # QUESTION: Given this code, what will happen if I type `josh.name`
+  class Instructor
+    def initialize(name)
+      @name = name
+    end
+
+    def name
+      "Rachel"
+    end
+  end
+  josh = Instructor.new 'Josh'
+  josh.name
+
+  # QUESTION: How do I get the @side_length of the triangle out?
+  class Triangle
+    def initialize(side_length)
+      @side_length = side_length
+    end
+  end
+  triangle = Triangle.new 45
+
+
+  # ===== Everything is an Instance =====
+  # ...what does that mean about classes?
+  # what can you infer from this?
+
+
+  # ===== Beneath the magic! =====
+  # https://github.com/ruby/ruby/blob/65a5162550f58047974793cdc8067a970b2435c0/ruby.h#L218-233

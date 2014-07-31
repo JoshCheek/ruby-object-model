@@ -1,0 +1,147 @@
+Lesson 2: Bindings
+  (this is #2 b/c otherwise "self" and "stack" are really difficult to talk about)
+  CORE IDEAS (ie standard):
+    Bindings
+      all code executes in a binding
+      these store local variables
+      they have a self (an instance that they are operating in)
+      this gives them access to instance variables
+      they can call methods on that object
+      when a method is called, it puts a new binding on the stack for that invocation
+  Objective:
+    Understand what a scope is, and how it pertains to instance variables
+      Assessment: Given a piece of code (just defs in main), identify:
+        how many scopes are on the stack
+        what they are, and what variables re visible to the
+  Material:
+    # 2: Bindings
+    RUBY_VERSION # => "2.1.1"
+
+    def show_callstack # just a helper method we'll use below
+      caller.map { |previous| previous[/`(.*?)'/, 1] }
+    end
+
+    # ===== Bindings =====
+    # Objectives:
+    #   * Able to describe the call-stack at any given point in the code
+    #   * Understand the scope of local variabels
+    #   * Understand that there is *always* a self (all code evaluates in an instance)
+
+    # ======= All code executes in a binding =====
+    binding
+    binding.eval('1 + 1')
+
+    # ===== Bindings store local variables =====
+    def method
+      a = 1
+      b = 2
+      binding
+    end
+
+    method.eval('local_variables')
+
+
+    # ===== Bindings know what instance they are being evaluted in =====
+    class Instructor
+      def initialize(name)
+        @name = name
+      end
+
+      def get_binding
+        binding
+      end
+    end
+
+    instance     = Instructor.new 'Josh'
+    user_binding = instance.get_binding
+    user_binding.eval('self')
+
+      # QUESTION: does that mean that this code is being evaluated in an instance?
+      #           and if so, what instance is it?
+
+    # ===== This gives them access to that instance's instance variables =====
+    user_binding.eval('instance_variables')
+
+      # QUESTION: How can we get the name "Josh" through the binding?
+
+
+
+    # ===== This also means they can call methods on that instance =====
+    # normally we have to say what object we're calling the method on
+    # e.g. user.reverse_name
+    # but if we don't say what object, it defaults to self
+    # without needing to specify 'self'
+
+    class Instructor
+      def reverse_name
+        @name.reverse
+      end
+    end
+    user_binding.eval('reverse_name')
+
+    # ===== When a method is called, it makes a new binding =====
+    # it evaluates the method's body in that binding
+    # it remembers all the bindings that came before it
+    # it jumps into that binding to evaluate the code
+    # and then returns to the one that came before it
+    # this is called the callstack
+
+    def method1
+      show_callstack
+      method2
+    end
+
+    def method2
+      show_callstack
+      method3
+    end
+
+    def method3
+      show_callstack
+    end
+
+    show_callstack
+    method1
+
+      # QUESTION: What would happen if you kept calling methods and never returned?
+
+    # EXERCISE: Run through the code below, identifying how each line changes the callstack,
+    #           And identifying what the local variables are, and what the instances are
+    # 
+    # class Student
+    #   def initialize(name)
+    #     @student_name = name
+    #   end
+    #   
+    #   def name
+    #     @student_name
+    #   end
+    # end
+    # 
+    # class Instructor
+    #   def initialize(name)
+    #     @instructor_name = name
+    #   end
+    #   
+    #   def teach(student)
+    #     puts "#{name} teaches #{student.name}"
+    #   end
+    #   
+    #   def name
+    #     @instructor_name
+    #   end
+    # end
+    # 
+    # def make_student(name)
+    #   Student.new(name)
+    # end
+    # 
+    # def make_instructor(name)
+    #   Instructor.new(name)
+    # end
+    # 
+    # student = make_student('Rolando')
+    # teacher = make_instructor('Josh')
+    # teacher.teach(student)
+    
+    # NOTE: If we have time, play the self game

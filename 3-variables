@@ -1,0 +1,135 @@
+Lesson 3: Variables
+  Objective:
+    Student can identify different types of variables and where they can be accessed
+  CORE IDEAS:
+    local variables
+      begin with a lowercase letter: local_var
+      method parameters (often called arguments) are local variables
+      only exist within a binding
+    instance variables
+      begin with an asperand (at sign): @instance_var
+      *only* accessible from the instance they are attached to
+      (remember, instances store instance variables)
+    global variables
+      begin with a dollar sign: $global_var
+      accessible from anywhere
+    constants
+      begin with a capital letter
+      use CamelCase and SCREAMING_SNAKE_CASE: ConstantVar or CONSTANT_VAR
+      are defined within classes (if defined in main, are defined on Object)
+      can be seen anywhere within that class (we call this their namespace)
+      we access them with the :: operator. e.g. Float::INFINITY
+  Material:
+    # 3: Variables
+
+    RUBY_VERSION # => "2.1.1"
+
+    # ===== Local variables =====
+    # begin with a lowercase letter: local_var
+
+    a = 1
+    local_variables
+
+    # method parameters (often called arguments) are local variables
+    def m1(b, c)
+      local_variables
+    end
+    m1(1, 2)
+
+    # only exist within a binding
+    def m2(b, c)
+      binding
+    end
+
+    # in this binding, I can see a (line_number is a local var added by SeeingIsBelieving)
+    binding.eval('local_variables')
+
+    # in the minding from m2, I can see b and c
+    m2(1, 2).eval('local_variables')
+
+    # I don't have access to those variables unless I am in that binding
+    def m3
+      a rescue $!
+    end
+    a
+    m3
+
+
+    # ===== Instance variables =====
+    # begin with an asperand (at sign): @instance_var
+    class Instructor
+      def initialize(name)
+        @name = name
+      end
+    end
+
+    josh = Instructor.new('Josh')
+    josh.instance_variables
+    josh.instance_variable_get(:@name)
+
+
+    # *only* accessible from the instance they are attached to
+    # (remember, instances store instance variables)
+    rachel = Instructor.new('Rachel')
+    rachel.instance_variables
+    rachel.instance_variable_get(:@name)
+    josh.instance_variable_get(:@name)
+
+
+    # ===== Global variables =====
+    # begin with a dollar sign: $global_var
+    # accessible from anywhere
+    $a = 'hello, everyone, everywhere!'
+
+    def m4
+      $a
+    end
+    $a
+    m4
+
+
+    # ===== Constants =====
+    # begin with a capital letter
+    # use CamelCase and SCREAMING_SNAKE_CASE: ConstantVar or CONSTANT_VAR
+
+    FavouriteNumber = 12
+    FavouriteNumber
+
+    FAVOURITE_COLOUR = 'brown'
+    FAVOURITE_COLOUR
+
+    Object.constants.grep(/favourite/i)
+
+    # are defined within classes
+    class Namespace
+      FavouriteNumber = 13
+    end
+
+    Object.constants.grep(/favourite/i)
+    Namespace.constants.grep(/favourite/i)
+
+    Object.const_get('FavouriteNumber')
+    Namespace.const_get('FavouriteNumber')
+
+    # can be seen anywhere within that class (we call this their namespace)
+    class Namespace
+      def show_fav_number
+        FavouriteNumber
+      end
+    end
+    Namespace.new.show_fav_number
+
+    # we access them with the :: operator. e.g. Float::INFINITY
+    Namespace::FavouriteNumber
+
+    # It is called a namespace because it is a place to define the names
+    class XML
+      Parser = 'An XML parser'
+    end
+
+    class HTML
+      Parser = 'An HTTP parser'
+    end
+
+    XML::Parser
+    HTML::Parser

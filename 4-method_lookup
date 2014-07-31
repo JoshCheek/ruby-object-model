@@ -1,0 +1,89 @@
+Lesson 4: Method lookup
+  Objective:
+    Given an object, identify which method will be invoked
+  CORE IDEAS:
+    when you invoke a method on an instance
+    starting at the instance's class
+    follow the chain of superclasses until you find the method
+    once you find the method, create a binding with self set to the instance
+    and run the code for the method in that binding
+  Material:
+    # 4: Method lookup
+
+    RUBY_VERSION  # => "2.1.1"
+
+    # Preface
+    class Instructor
+      def teach
+        'teaches something'  # => "teaches something"
+      end
+    end
+
+    class RemoteInstructor < Instructor
+    end
+    remote_instructor = RemoteInstructor.new  # => #<RemoteInstructor:0x007f98ab84a918>
+    remote_instructor.teach                   # => "teaches something"
+
+    # QUESTION: How did the remote instructor call the teach method?
+
+
+    # ===== Finding the Method =====
+    # when you invoke a method on an instance:
+    #   start at the Instance's class
+    #   follow the chain of superclasses until you find the method
+
+    remote_instructor.class                    # => RemoteInstructor
+                     .instance_methods(false)  # => []
+
+    remote_instructor.class                    # => RemoteInstructor
+                     .superclass               # => Instructor
+                     .instance_methods(false)  # => [:teach]
+
+    remote_instructor.method(:teach).owner  # => Instructor
+
+    # NOTE: methods on their own lines are no different from having them on the same line
+    #       and each method in the chain is invoked on the result of the previous method call
+    # so:
+    #   remote_instructor.class
+    #                    .superclass
+    #                    .instance_methods(false)
+    # is the same as:
+    #   remote_instructor.class.superclass.instance_methods(false)
+    # is the same as:
+    #   klass            = remote_instructor.class
+    #   superclass       = klass.superclass
+    #   instance_methods = superclass.instance_methods(false)
+
+
+    # ===== Evaluating the Method =====
+    # once you find the method, create a binding with self set to the instance
+    # and run the code for the method in that binding
+    class Instructor
+      def initialize(subject)
+        @subject = subject                 # => "Ruby on Rails"
+      end
+
+      def teach
+        "Teaches #{@subject} from Turing"  # => "Teaches Ruby on Rails from Turing"
+      end
+    end
+
+    class RemoteInstructor < Instructor
+    end
+
+    remote_instructor = RemoteInstructor.new('Ruby on Rails')  # => #<RemoteInstructor:0x007f98ab842df8 @subject="Ruby on Rails">
+    remote_instructor.instance_variables                       # => [:@subject]
+    remote_instructor.teach                                    # => "Teaches Ruby on Rails from Turing"
+
+    # notice that even though the method is defined in a different class
+    # it still executes with self as the remote_instructor
+
+    # QUESTION: How did remote_instructor's @subject instance variable get set?
+
+    # QUESTION: Given that the remote instructor does not teach from Turing
+    #           And knowing what we do about how methods are found
+    #           How can we get `remote_instructor.teach` to return "Teaches Ruby on Rails from somewhere..."
+
+    # QUESTION: What if Ruby can't find the method?
+
+    # QUESTION: Why do we say RemoteInstructor inherits from Instructor?

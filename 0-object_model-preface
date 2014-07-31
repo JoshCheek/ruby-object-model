@@ -1,0 +1,34 @@
+High level plan:
+  1. Classes and Instances
+  2. Bindings
+  3. Variables
+  4. Method lookup / invocation
+
+Reminders to self:
+  remember to draw the Object Model as we go
+  make sure they know its okay that they don't understand every piece of *code* (esp C code)
+  the important part is to understand the concepts
+  ie
+    editor doesn't matter, it's a way to see the code
+    shell doesn't matter, it's a way to invoke a program
+    some unfamiliar syntax or method doesn't matter, as long as you can infer what it's doing
+      (assert your inference to be sure)
+  talk about stupid vs ignorant/incompetent
+    stupid is a state of being (a characteristic)
+    ignorant is a measure of knowledge (an acquirable quantity)
+    incompetent is a measure of skill (an acquirable quantity)
+    you *are not* stupid
+    you *are* ignorant and incompetent when it comes to Ruby (not other things)
+    this is a fact. Accept it.
+    don't let your pride cause you to try to hide it (ie fear of speaking up and being wrong)
+    that will prevent you from adequately addressing it
+    which will keep you ignorant and incompetent
+    IF you are willing to say "I don't understand", then you can address it
+    and increase your knowledge and skill
+    moving beyond ignorance and incompetence
+  Same thing goes for me
+    if I'm fucking up, then I'm fucking up
+    this is a fact, regardless of whether anyone says it
+    not saying it doesn't mean I'm not fucking up, it means it will be harder for me to realize and correct it
+    so *tell me*
+  Explain what Seeing is Believing is, offer to install it with them at some point
