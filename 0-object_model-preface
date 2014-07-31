@@ -1,8 +1,43 @@
-High level plan:
+Gameplan:
   1. Classes and Instances
+    Classes
+      store instance methods
+      have a superclass pointer (this is called inheritance)
+    Instances
+      store instance variables
+      have a class pointer
+    Classes are also instances (of Class)
   2. Bindings
+    all code executes in a binding
+    these store local variables
+    they have a self (an instance that they are operating in)
+    this gives them access to instance variables
+    they can call methods on that object
+    when a method is called, it puts a new binding on the stack for that invocation
   3. Variables
+    local variables
+      begin with a lowercase letter: local_var
+      method parameters (often called arguments) are local variables
+      only exist within a binding
+    instance variables
+      begin with an asperand (at sign): @instance_var
+      *only* accessible from the instance they are attached to
+      (remember, instances store instance variables)
+    global variables
+      begin with a dollar sign: $global_var
+      accessible from anywhere
+    constants
+      begin with a capital letter
+      use CamelCase and SCREAMING_SNAKE_CASE: ConstantVar or CONSTANT_VAR
+      are defined within classes (if defined in main, are defined on Object)
+      can be seen anywhere within that class (we call this their namespace)
+      we access them with the :: operator. e.g. Float::INFINITY
   4. Method lookup / invocation
+    when you invoke a method on an instance
+    starting at the instance's class
+    follow the chain of superclasses until you find the method
+    once you find the method, create a binding with self set to the instance
+    and run the code for the method in that binding
 
 Reminders to self:
   remember to draw the Object Model as we go
