@@ -5,22 +5,24 @@ I think maybe it was unclear what "self" was, and possibly *why* it matters.
 
 I *think* I got through the next day by jumping into pry and showing this code:
 
-    require 'pry'
-    class Instructor
-      def initialize(name)
-        @name = name
-      end
+```ruby
+require 'pry'
+class Instructor
+  def initialize(name)
+    @name = name
+  end
 
-      def get_name
-        binding.pry
-        @name
-      end
-    end
+  def get_name
+    binding.pry
+    @name
+  end
+end
 
-    josh = Instructor.new 'Josh'
-    rachel = Instructor.new 'Rachel'
-    josh.get_name
-    rachel.get_name
+josh = Instructor.new 'Josh'
+rachel = Instructor.new 'Rachel'
+josh.get_name
+rachel.get_name
+```
 
 Possibly if I drew the binding on the board and showed the local variables in it
 and also drew the self pointer.
