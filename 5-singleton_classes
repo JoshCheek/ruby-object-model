@@ -1,0 +1,82 @@
+Lesson 5: Singleton Classes
+  CORE IDEAS:
+    Every object can have methods defined on *it* itself.
+    This is how class methods are defined.
+    The way this is accomplished is to insert a class between the object and its "actual" class.
+    This class is hidden and cannot be instantiated.
+    It is called the "singleton class"
+  Objective:
+    Understand what singleton classes are and how they are used.
+  Material:
+    # Lesson 5: Singleton Classes
+    #   CORE IDEAS:
+    #     Every object can have methods defined on *it* itself.
+    #     This is how class methods are defined.
+    #     The way this is accomplished is to insert a class between the object and its "actual" class.
+    #     This class is hidden and cannot be instantiated.
+    #     It is called the "singleton class"
+    #   Objective:
+    #     Understand what singleton classes are and how they are used.
+    #   Material:
+
+    # ===== What is a Class Method? =====
+
+    # How are class methods are defined?
+    class Josh
+      self
+      def self.favourite_number
+        123
+      end
+    end
+
+    Josh.favourite_number
+
+    # QUESTION: How could this be implemented?
+
+
+    # We said that all methods come from an object's class
+    # but that would mean that this method is on Class itself!
+    Josh.class                                          # SHOWME
+    Class.instance_methods.include?(:favourite_number)  # SHOWME
+
+    # WHAT IS THIS? IS JOSH A LIAR!?! WHERE IS THAT METHOD?
+    # We know it gets its method from its class, and we can see its class is `Class`
+    # ...but it's not! Ruby is lying to you!
+
+    # QUESTION: Given that we know Ruby is lying, How could we explain this?
+
+
+    # ===== Singleton Methods =====
+
+    # This class is called the singleton class.
+    # We call it this because it has one single instance, the current object
+
+    # There are two other ways to define a class for our class
+
+    # 1. We can open the singleton class of an object (Josh) with this syntax
+    class << Josh
+      def favourite_colour
+        'brown'
+      end
+    end
+
+    Josh.favourite_colour  # SHOWME
+
+    # 2. We can also use this syntax
+    Josh.singleton_class.class_eval do
+      def favourite_drink
+        'Bourbon and Coke... no ice'
+      end
+    end
+
+    Josh.favourite_drink # SHOWME
+
+    # ===== Class methods are just methods on the singleton class, and *every* object has a singleton class =====
+
+    # YOUR TURN!
+    # Define a string that has a method "tldr", which returns the first character + an ellipsis
+    # Show that this only exists on the current String and not on all Strings
+    s = "Hello, World"
+    # <-- your code here!
+    s.tldr # => "H..."
+
