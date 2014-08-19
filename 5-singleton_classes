@@ -8,17 +8,6 @@ Lesson 5: Singleton Classes
   Objective:
     Understand what singleton classes are and how they are used.
   Material:
-    # Lesson 5: Singleton Classes
-    #   CORE IDEAS:
-    #     Every object can have methods defined on *it* itself.
-    #     This is how class methods are defined.
-    #     The way this is accomplished is to insert a class between the object and its "actual" class.
-    #     This class is hidden and cannot be instantiated.
-    #     It is called the "singleton class"
-    #   Objective:
-    #     Understand what singleton classes are and how they are used.
-    #   Material:
-
     # ===== What is a Class Method? =====
 
     # How are class methods are defined?
