@@ -1,0 +1,148 @@
+Lesson 5: Modules
+  CORE IDEAS:
+    Modules
+      are implemented in Ruby as classes that can't be instantiated
+      can be added as a superclass of another class/module via include
+      can namespace since they are classes
+  Objective
+    Know how to use include and extend, understand how these fit into the object model
+  Material
+    # ===== What are Modules good for? =====
+    # Well, they can be stuck into an inheritance hierarchy
+    # which means that when we go to look up a method, we will look through the module's methods
+
+    module GreetsEveryone
+      def hello_world
+        'Hello, world!'
+      end
+    end
+
+    class FriendlyPerson
+      include GreetsEveryone
+    end
+
+    FriendlyPerson.new.hello_world # SHOWME
+
+    # ===== Whoa, how does that work? =====
+    # Modules are implemented as classes under the hood
+    # https://github.com/ruby/ruby/blob/trunk/class.c#L729
+
+    # But they can't be instantiated
+
+    begin
+      GreetsEveryone.new
+    rescue NoMethodError => e
+      e.message # SHOWME
+    end
+
+    # And they can't be inherited from
+
+    begin
+      class NoDice < GreetsEveryone
+      end
+    rescue TypeError => e
+      e.message # SHOWME
+    end
+
+
+    # ===== What does `include` do? =====
+    # Include sets the module as a superclass (NOT SINGLETON CLASS)
+    # remember:
+    #   superclass is where we look next when finding our instance's methods
+    #   singleton_class is our current object's class
+
+    module GreetsEveryone
+    end
+
+    class FriendlyPerson
+      include GreetsEveryone
+    end
+
+    FriendlyPerson.ancestors # SHOWME
+
+    # QUESTION: If this is true, then how does it find the methods in Child's current superclass?
+
+    # QUESTION: What I just said is a lie, and Ruby lied to you, too, when it showed you Parent in the hierarchy.
+    #           Modules are *not* inserted into the inheritance hierarchy.
+    #           Can you think of an example would not work if this lie was true?
+
+    # QUESTION: Given what we know about the object model, how could we implement this behaviour
+    #           and still get around our case that proves it isn't stuck in the middle of
+
+
+    # ===== How it's done (don't read ahead to cheat on those questions :P) =====
+    # Really, Ruby creates a new hidden class, https://github.com/ruby/ruby/blob/trunk/class.c#L792-794
+    # and inserts that into the inheritance hierarchy. There's no way to directly show this from Ruby-land, though.
+    #
+    # This class's method table points at the module's method table, so it has all the same methods!
+    # https://github.com/ruby/ruby/blob/trunk/class.c#L809
+    #
+    # And its super class is set to the original class's superclass
+    # https://github.com/ruby/ruby/blob/trunk/class.c#L811
+
+    # This way, each thing we include it into has a class of its own
+    # which allows it to inherit correctly.
+    module GreetsEveryone
+    end
+
+    class Politician
+      include GreetsEveryone
+    end
+
+    class Usher
+      include GreetsEveryone
+    end
+
+    Politician.ancestors # SHOWME
+    Usher.ancestors      # SHOWME
+
+    # QUESTION: If including into the class makes these methods available to the instance
+    #           how could we make them available to the class?
+
+
+    # ===== What does extend do? =====
+    # It turns out that this is a common enough need that we get a method to do it
+
+    module GreetsEveryone
+      def hello_world
+        'Hello, world!'
+      end
+    end
+
+    class UsingIncludeInSingletonClass
+      class << self
+        include GreetsEveryone
+      end
+    end
+
+    UsingIncludeInSingletonClass.hello_world # SHOWME
+
+    class UsingExtend
+      extend GreetsEveryone
+    end
+
+    UsingExtend.hello_world # SHOWME
+
+    # ===== Modules for namespacing =====
+    # So we can put separate constants of the same name by placing them in a class
+    # and since modules are implemented as classes, we can do the same thing with modules:
+    module Xml
+      class Parser
+        def parse
+          'parsing xml'
+        end
+      end
+    end
+
+    module Json
+      class Parser
+        def parse
+          'parsing json'
+        end
+      end
+    end
+
+    Xml::Parser.new.parse  # SHOWME
+    Json::Parser.new.parse # SHOWME
+
+    # Question: What might you use this for?
