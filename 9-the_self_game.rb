@@ -75,3 +75,25 @@ Example.new.my_method
 5.times do |i|
   self
 end
+
+class Example
+  class << self
+    self # => #<Class:#<Object:0x007f983982a400>>
+  end
+end
+
+# after `class <<`
+class << "abc"
+  self
+end
+
+# when in the inherited value
+class A < (p self
+           Object)
+
+  # when in a method default value
+  def m(a=(p self
+           1))
+  end
+end
+A.new.m
