@@ -1,0 +1,5 @@
+break obj model 1 into 2 parts, so the whole thing takes 3 lessons altogether
+start with bindings instead of classes and objects
+  b/c I am pretty sure some students don't understand how method invocation works,
+  and it is necessary to understand classes and instances
+revisit object model once they've done some stuff in Rails, since they now have some experience with singleton classes and modules and inheritance
